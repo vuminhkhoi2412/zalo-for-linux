@@ -30,6 +30,9 @@ if (process.platform === 'linux') {
     // Use the already permitted org.freedesktop.Notifications service instead.
     process.env.NOTIFY_IGNORE_PORTAL = '1';
   }
+  // Without it Chromium 108 stalls some frames >100 ms while scrolling the
+  // conversation list (compositor-bound; the main thread is idle).
+  app.commandLine.appendSwitch('enable-gpu-rasterization');
   const uid = process.getuid ? process.getuid() : 1000;
   const runtimeDir = process.env.XDG_RUNTIME_DIR || `/run/user/${uid}`;
   if (!process.env.PULSE_SERVER) {
